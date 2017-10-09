@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block title %}
+  Camp Detail
+{% endblock %}
+
+{% block content %}
+<br>
+<br>
+<div class="row">
+<div class="card mb-3 col-sm-10 col-md-7 offset-sm-1 offset-md-0">
+  <div class="text-center text-truncate" style="display: block; height: 400px">
+    <img class="card-img-top" src="{{ camp.image.url }}" width="900" height="480" alt="Card image cap">
+  </div>
+  <!-- <div class="card-img-overlay"> -->
+  <div class="card-block">
+    <div class="row">
+      <div class="col-10">
+        <h4 class="card-title"> <a href="{% url 'camp_detail' camp.slug %}"> {{camp.name}} </a> </h4>
+      </div>
+      <div class="col-2">
+        {% if average_rating %}
+          <h4> <span class="badge badge-success">{{average_rating}}/5.0 </span> </h4>
+        {% else %}
+          <h4> <span class="badge badge-success"> No Rating</span> </h4>
+        {% endif %}
+      </div>
+    </div>
+    <p class="card-text">{{ camp.description }}</p>
+  </div>
+</div>
+
+<div class="card mb-3 col-sm-10 col-md-4 offset-sm-1">
+  <div class="card-block">
+    <h3 class="card-title text-primary">User Reviews</h3>
+
+    {% if current_user_rating %}
+    <div class="card">
+      <div class="card-block">
+      <div class="row">
+	    <div class="col-sm-4" >
+	      <img class="rounded-circle img-fluid" src="https://image.freepik.com/free-icon/male-user-shadow_318-34042.jpg" alt="Card image cap">
+	    </div>
+	    <div class="col-sm-8">
+	      <div class="row">
+	        <h6 class="text-primary">{{ current_user_rating.posted_by }}</h6>
+	      </div>
+	      <div class="row">
+	        {% for i in current_user_rating.stars %}
+	          <i class="fa fa-star text-warning" aria-hidden="true"></i>
+	        {% endfor %}
+          </div>
+          <div class="row">
+          	<p>{{ current_user_rating.comment }}</p>
+          </div>
+	    </div>
+      </div>
+      </div>
+      <div class="card-footer">
+        <small class="text-muted">Last updated {{current_user_rating.updated}}</small>
+      </div>
+    </div>
+    <br>
+    {% elif user.is_authenticated %}
+    <div class="card">
+      <div class="card-block">
+        <form method="post" action="{% url 'post_review' camp.slug %}">
+          {% csrf_token %}
+          <div class="form-group">
+          	<label class="mr-sm-5" for="inlineFormCustomSelect">Rating</label>
+            <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="inlineFormCustomSelect" name="user-rating" required>
+              <option value="1">One</option>
+              <option value="2">Two</option>
+              <option value="3">Three</option>
+              <option value="4">Four</option>
+              <option value="5">Five</option>
+            </select>
+            
+          </div>
+
+          <div class="form-group">
+            
+      	    <input type="text" name="user-review" class="form-control" placeholder="Write a short review" maxlength="50" required>
+      	  </div>
+      	  <button class="btn btn-primary btn-block text-center" type="submit">Submit Review</button>
+        </form>
+      </div>
+    </div>
+    <br>
+    {% endif %}
+
+    {% for rating in ratings %}
+
+    <div class="card">
+      <div class="card-block">
+      <div class="row">
+	    <div class="col-sm-4" >
+	      <img class="rounded-circle img-fluid" src="https://image.freepik.com/free-icon/male-user-shadow_318-34042.jpg" alt="Card image cap">
+	    </div>
+	    <div class="col-sm-8">
+	      <div class="row">
+	        <h6 class="text-primary">{{ rating.posted_by }}</h6>
+	      </div>
+	      <div class="row">
+	        {% for i in rating.stars %}
+	          <i class="fa fa-star text-warning" aria-hidden="true"></i>
+	        {% endfor %}
+          </div>
+          <div class="row">
+          	<p>{{ rating.comment }}</p>
+          </div>
+	    </div>
+      </div>
+      </div>
+      <div class="card-footer">
+        <small class="text-muted">Last updated {{rating.updated}}</small>
+      </div>
+    </div>
+    <br>
+    {% endfor %}
+  </div>
+</div>
+</div>
+{% endblock %}

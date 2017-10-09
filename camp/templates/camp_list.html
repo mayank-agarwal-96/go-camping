@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}
+  Camp list
+{% endblock %}
+
+{% block content %}
+
+{% for camp in camps %}
+  {% if forloop.first %} <br><br> <div class="row">{% endif %}
+  <div class="card col-lg-3 col-md-3 col-sm-10" style="margin: auto; padding: 0px">
+    <div class="text-center">
+    <img class="card-img-top img-fluid img-thumbnail" src="{{ camp.image.url }}" alt="Card image cap">
+    </div>
+    <div class="card-block">
+      <div class="row">
+        <div class="col-8">
+          <h4 class="card-title"> <a href="{% url 'camp_detail' camp.slug %}"> {{camp.name}} </a> </h4>
+        </div>
+        <div class="col-2">
+          {% if camp.average_rating %}
+            <h5> <span class="badge badge-success">{{camp.average_rating}}/5.0 </span> </h5>
+          {% else %}
+            <h5> <span class="badge badge-success">No Rating </span> </h5>
+          {% endif %}
+        </div>
+      </div>
+      <h6>{{ camp.city }}, {{ camp.state }}, {{ camp.country }}</h6>
+      <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+    </div>
+    <div class="card-footer">
+      <small class="text-muted">Last updated {{camp.updated}}</small>
+    </div>
+  </div>
+  {% if forloop.last %}</div><br>
+  {% elif forloop.counter|divisibleby:3 %}</div><br><br><div class="row">{% endif %}
+
+{% endfor %}
+{% endblock %}
