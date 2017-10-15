@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Welcome{% endblock %}
+
+{% load static %}
+
+{% block body %}
+<style type="text/css">
+	body {
+    	background-image: url("{% static 'images/camp1.jpg' %}");
+    	background-repeat: no-repeat;
+	}
+</style>
+
+<body>
+	<div class="container">
+		<br>
+		<br>
+		<div class="row text-center">
+			<div class="col-md-6 offset-md-3 col-sm-10 offset-sm-1">
+				<h1 style="color: white;"> Welcome to GoCamping</h1>
+			</div>
+		</div>
+		<br><br><br><br><br><br><br>
+		<div class="row">
+			<div class="col-md-6 offset-md-3 col-sm-10 offset-sm-1">
+				<a href="{% url 'camp_home' %}"><button class="btn btn-primary btn-block text-center">Go Looking for Camps</button></a>
+			</div>
+		</div>
+	</div>
+</body>
+{% endblock %}

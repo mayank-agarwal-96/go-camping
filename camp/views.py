@@ -12,24 +12,28 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from .forms import SignUpForm, LoginForm
 from .models import Camp, Rate
+from watson import search as watson
 
 # Create your views here.
 def home(request):
     if(request.method == "POST"):
         data = [ x.strip(' ') for x in str(request.POST.get('search_term')).split(',')]
+        search_text = " ".join(data)
 
-        data_params = {'city': None, 'state': None, 'country': None}
-        if len(data) == 3:
-            data_params['city'] = data[0]
-            data_params['state'] = data[1]
-            data_params['country'] = data[2]
+        # data_params = {'city': None, 'state': None, 'country': None}
+        # if len(data) == 3:
+        #     data_params['city'] = data[0]
+        #     data_params['state'] = data[1]
+        #     data_params['country'] = data[2]
 
-        elif len(data) == 2:
-            data_params['state'] = data[0]
-            data_params['country'] = data[1]
+        # elif len(data) == 2:
+        #     data_params['state'] = data[0]
+        #     data_params['country'] = data[1]
 
-        elif len(data) == 1:
-            data_params['country'] = data[0]
+        # elif len(data) == 1:
+        #     data_params['country'] = data[0]
+
+        data_params = {'query': search_text}
         return redirect("%s?%s" % (reverse('camp_list'), urllib.urlencode(data_params)))
         
     return render(request, "index.html")
@@ -46,16 +50,18 @@ def add_camp(request):
 def camp_list(request):	
 
     data = request.GET
-    city = data.get('city')
-    state = data.get('state')
-    country = data.get('country')
-    qs = Camp.objects.all()
-    camps = qs
-    if state:
-        camps = qs.filter(state__iexact=state)
-    if city:
-        camps = qs.filter(city__iexact=city)
+    # city = data.get('city')
+    # state = data.get('state')
+    # country = data.get('country')
+    # qs = Camp.objects.all()
+    # camps = qs
+    # if state:
+    #     camps = qs.filter(state__iexact=state)
+    # if city:
+    #     camps = qs.filter(city__iexact=city)
 
+    search_text = data.get('query', "")
+    camps = watson.filter(Camp, search_text)
     for camp in camps:
         ratings = Rate.objects.filter(camp=camp)
         average_rating = ratings.aggregate(Avg('rating'))['rating__avg']
@@ -147,3 +153,7 @@ def login_view(request):
 
     else:
         return render(request, 'login.html', {'form': LoginForm()})
+
+
+def landing(request):
+    return render(request, 'landing.html')

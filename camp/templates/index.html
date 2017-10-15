@@ -3,24 +3,32 @@
 {% block title %}
   Search
 {% endblock %}
+{% load static %}
 
-
-{% block content %}
-
-<form action="" method="POST">
-{% csrf_token %}
-  <div class="form-group">
-    <label for="search_term">Enter City</label>
-    <input type="text" class="form-control col-sm-8" id="search_term" name="search_term" placeholder="Search by City" name="" required>
-  </div>
-  <button type="submit" class="btn btn-primary">Submit</button>
-</form>
-
-<script>
-	function activatePlacesSearch() {
-		var input = document.getElementById('search_term');
-		var autocomplete = new google.maps.places.Autocomplete(input);
-	}
-</script>
-
+{% block style %}
+  <style type="text/css">
+    body {
+        background-image: url("{% static 'images/camp2.jpg' %}");
+        background-repeat: no-repeat;
+    }    
+  </style>
+{% endblock %}
+{% block container %}
+  <br><br><br><br><br><br><br><br><br>
+  <form action="" method="POST" class="form-inline">
+  {% csrf_token %}
+    <div class="form-group col-sm-8 offset-sm-1 col-xs-10 offset-xs-1">
+      <label for="search_term" class="sr-only">Password</label>
+      <input type="text" class="form-control col-sm-12" id="search_term" name="search_term" placeholder="Search by City, State, Camp Name">
+    </div>
+    <div class="col-sm-2 col-xs-10 offset-xs-1">
+    <button type="submit" class="btn btn-primary">Search</button>
+    </div>
+  </form>
+  <script>
+  	function activatePlacesSearch() {
+  		var input = document.getElementById('search_term');
+  		var autocomplete = new google.maps.places.Autocomplete(input);
+  	}
+  </script>
 {% endblock %}
