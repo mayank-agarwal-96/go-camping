@@ -131,13 +131,13 @@ MEDIA_URL = "/media/"
 if settings.DEBUG:
     MEDIA_ROOT = os.path.join(BASE_DIR, "media_cdn")
 
-if not settings.DEBUG:
+if not DEBUG:
     DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 
 # Heroku: Update database configuration from $DATABASE_URL.
 import dj_database_url
 
-if not settings.debug:
+if not DEBUG:
     db_from_env = dj_database_url.config(conn_max_age=500)
     DATABASES['default'].update(db_from_env)
