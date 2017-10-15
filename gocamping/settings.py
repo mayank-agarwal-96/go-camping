@@ -128,7 +128,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "static_cdn")
 
 MEDIA_URL = "/media/"
-if settings.DEBUG:
+if DEBUG:
     MEDIA_ROOT = os.path.join(BASE_DIR, "media_cdn")
 
 if not DEBUG:
