@@ -87,7 +87,7 @@ def camp_detail(request, slug=None):
 
         if current_user_rating:
             current_user_rating.stars = range(current_user_rating.rating)
-            current_user_rating.posted_by = request.user.first_name + request.user.last_name
+            current_user_rating.posted_by = request.user.first_name + " " + request.user.last_name
         
     if len(ratings) > 5:
         ratings = ratings[:5]
